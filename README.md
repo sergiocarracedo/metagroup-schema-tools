@@ -37,13 +37,14 @@ Básicamente esta estructura permite definir o Metagrupo (co seu logo, links a r
 A chave `events` poder ser un obxecto único ou un array de obxectos, que define as fontes de eventos de dito grupo
 
 As fontes posibles actuais son:
-* Meetup: 
+* Meetup (via RSS feed): 
   `
   {
     "type": "meetup",
     "meetupid": "AIndustriosa"
   }
   `
+  Obtén os eventos desde `https://www.meetup.com/[GROUP ID]/events/rss/`. Debido ás limitacións actuais de Meetup, os eventos pasados non están dispoñibles nesta fonte e `getPrevFromSource(source, options)` devolverá un array baleiro para fontes Meetup.
 * Eventbrite: 
   `
   {

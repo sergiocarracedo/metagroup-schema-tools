@@ -1,8 +1,11 @@
 {
   "name": "metagroup-schema-tools",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Metagroup (like vigotech.org) schema tools",
   "main": "src/index.js",
+  "scripts": {
+    "test": "node --test test/meetup.test.js"
+  },
   "repository": "git@github.com:VigoTech/metagroup-schema-tools.git",
   "author": "VigoTech Alliance <vigotechalliance@gmail.com>",
   "contributors": [
