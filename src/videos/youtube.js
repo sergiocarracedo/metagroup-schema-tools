@@ -1,52 +1,68 @@
-const request = require("sync-request")
-const { google } = require('googleapis');
+const RssParser = require('rss-parser')
+
+const parser = new RssParser()
+
+function getVideoId(item) {
+  if (item.id) {
+    const parts = item.id.split(':')
+    return parts[parts.length - 1]
+  }
+
+  if (item.link) {
+    try {
+      const url = new URL(item.link)
+      return url.searchParams.get('v')
+    } catch (e) {
+      return null
+    }
+  }
+
+  return null
+}
+
+function getThumbnails(videoId) {
+  return {
+    default: {
+      url: `https://i.ytimg.com/vi/${videoId}/default.jpg`,
+      width: 120,
+      height: 90
+    },
+    medium: {
+      url: `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`,
+      width: 320,
+      height: 180
+    },
+    high: {
+      url: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+      width: 480,
+      height: 360
+    }
+  }
+}
 
 module.exports = {
   async getChannelVideos(source, limit, options) {
-
-    if (!options.hasOwnProperty('youtubeApiKey')) {
-      throw new Error('Property \'youtubeApiKey\' is required in options object')
-    }
-
-
     if (!source.channel_id) {
       return []
     }
-    const YouTube = google.youtube('v3');
+
+    const feed = await parser.parseURL(`https://www.youtube.com/feeds/videos.xml?channel_id=${source.channel_id}`)
     const videos = []
 
-    const channelResults = await YouTube.channels.list({
-      part: 'contentDetails',
-      id: source.channel_id,
-      limit,
-      auth: options.youtubeApiKey
-    })
+    for (const item of feed.items.slice(0, limit)) {
+      const videoId = getVideoId(item)
 
-    const channelItems = channelResults.data.items;
-    for(let i in channelItems) {
-      const channelItem = channelItems[i]
-      const playlistId = channelItem.contentDetails.relatedPlaylists.uploads
-
-      const playlistResults = await YouTube.playlistItems.list({
-        part: 'snippet',
-        playlistId: playlistId,
-        maxResults: limit,
-        auth: options.youtubeApiKey
-      });
-
-      const playlistItems = playlistResults.data.items;
-      for(let j in playlistItems) {
-        const playlistItem = playlistItems[j]
-
-        videos.push({
-          player: 'youtube',
-          id: playlistItem.snippet.resourceId.videoId,
-          title: playlistItem.snippet.title,
-          pubDate: new Date(playlistItem.snippet.publishedAt).getTime(),
-          thumbnails: playlistItem.snippet.thumbnails
-        })
+      if (!videoId) {
+        continue
       }
 
+      videos.push({
+        player: 'youtube',
+        id: videoId,
+        title: item.title,
+        pubDate: new Date(item.isoDate || item.pubDate).getTime(),
+        thumbnails: getThumbnails(videoId)
+      })
     }
 
     return videos

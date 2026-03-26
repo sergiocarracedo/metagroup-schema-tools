@@ -114,7 +114,7 @@ Provee métodos para importar e normalizar os próximos das distintas fontes
   * `getVideosFromSource(source, limit, options)` obten os videos dunha fonte. *Método asíncrono*
         
       
-  En todos os casos _options_ é un obxecto no que se pasan elementos que poden precisar cada un dos importadores, por exemplo, o importador de *youtube* precisa o _youtubeApiKey_ para poder funcionar.
+  En todos os casos _options_ é un obxecto no que se pasan elementos que poden precisar cada un dos importadores. O importador de *youtube* emprega a fonte RSS pública da canle, polo que non precisa chave de API.
   
   
 ## Exemplo de importador
