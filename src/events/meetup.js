@@ -1,6 +1,32 @@
 const moment = require('moment')
 const request = require('sync-request')
 
+function slugify(value) {
+  return String(value || '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
+function getSourceId(source, item, date) {
+  const itemUrl = item.url || ''
+  const idFromUrlMatch = itemUrl.match(/\/events\/(\d+)\/?$/)
+  const idFromUrl = idFromUrlMatch ? idFromUrlMatch[1] : null
+  const groupId = source && source.meetupid ? source.meetupid : 'meetup'
+
+  if (idFromUrl) {
+    return `${groupId}-${idFromUrl}`
+  }
+
+  if (date) {
+    return `${groupId}-${date}-${slugify(item.title || 'event')}`
+  }
+
+  return `${groupId}-${slugify(item.title || 'event')}`
+}
+
 function decodeHtml(value) {
   return (value || '')
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
@@ -162,6 +188,7 @@ module.exports = {
 
         if (eventDetails.date !== null && eventDetails.date >= new Date().getTime()) {
           nextEvents.push({
+            sourceId: getSourceId(source, item, eventDetails.date),
             title: item.title,
             date: eventDetails.date,
             url: item.url,

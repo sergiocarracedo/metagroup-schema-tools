@@ -91,6 +91,7 @@ test('Meetup getNext parses upcoming RSS events from JSON-LD pages', () => {
   const events = meetup.getNext({ meetupid: 'test-group' }, {})
 
   assert.deepEqual(events, [{
+    sourceId: 'test-group-1',
     title: 'Future Event',
     date: new Date(futureDate).getTime(),
     url: 'https://www.meetup.com/test-group/events/1/',
