@@ -17,6 +17,9 @@
   ],
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "test": "node --test"
+  },
   "dependencies": {
     "jsonschema": "^1.4.0",
     "moment": "^2.29.1",
