@@ -1,0 +1,16 @@
+src/events/meetup.js
+  h_f90ee31b03fc41 140
+tests/meetup.test.js
+  h_f90ee31b03fc41 116-161
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.11",
+  "base_commit_sha": "bf735feb11f7f5a3aa4c6a21b4e28422c5988aba",
+  "prompts": {},
+  "humans": {
+    "h_f90ee31b03fc41": {
+      "author": "Sergio Carracedo <hi@sergiocarracedo.es>"
+    }
+  }
+}
