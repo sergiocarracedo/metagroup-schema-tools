@@ -137,6 +137,7 @@ function getDateFromDescription(description) {
   const cleaned = dateLine
     .replace(/^[^A-Za-z0-9]+/, '')
     .split(' - ')[0]
+    .replace(/(\|\s*\d{1,2}:\d{2})\s*[-–]\s*\d{1,2}:\d{2}\b/, '$1')
     .trim()
   const formats = [
     'MMMM D, YYYY | HH:mm',

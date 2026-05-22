@@ -113,3 +113,49 @@ test('Meetup getPrev returns an empty array', () => {
 
   assert.deepEqual(meetup.getPrev({ meetupid: 'test-group' }, {}), [])
 })
+
+test('Meetup getNext falls back to parsing date ranges from description when JSON-LD date is missing', () => {
+  const now = Date.now()
+  const futureDate = new Date(now + 7 * 24 * 60 * 60 * 1000)
+  const month = futureDate.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' })
+  const day = futureDate.getUTCDate()
+  const year = futureDate.getUTCFullYear()
+  const rssFeed = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <item>
+      <title><![CDATA[Fallback Event]]></title>
+      <link>https://www.meetup.com/test-group/events/3/</link>
+      <description><![CDATA[📍 ONLINE<br />🗓 ${month} ${day}, ${year} | 18:00-20:30]]></description>
+    </item>
+  </channel>
+</rss>`
+
+  const meetup = loadMeetupWithMockedRequest((method, url) => {
+    if (url === 'https://www.meetup.com/test-group/events/rss/') {
+      return {
+        getBody() {
+          return rssFeed
+        },
+      }
+    }
+
+    if (url === 'https://www.meetup.com/test-group/events/3/') {
+      return {
+        getBody() {
+          return '<html><head></head><body>No event json-ld</body></html>'
+        },
+      }
+    }
+
+    throw new Error(`Unexpected URL ${url}`)
+  })
+
+  const events = meetup.getNext({ meetupid: 'test-group' }, {})
+
+  assert.equal(events.length, 1)
+  assert.equal(events[0].title, 'Fallback Event')
+  assert.equal(events[0].url, 'https://www.meetup.com/test-group/events/3/')
+  assert.equal(events[0].location, 'ONLINE')
+  assert.equal(typeof events[0].date, 'number')
+})
