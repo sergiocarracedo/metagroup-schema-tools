@@ -1,0 +1,21 @@
+tests/events-json.test.js
+  s_daf782b057e339::t_6a0f541e0b7c9c 5,15,17,36,40-43,50,54-57,65,67-88,90-93,101,103-142,144-145,147-160,162-163,165-197,199-200,202-234,236-237,239
+src/events/json.js
+  s_daf782b057e339::t_6a0f541e0b7c9c 3-18,20,27-28,32-34,42,49-50,54-56,63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.11",
+  "base_commit_sha": "ca1c3e84f67be3d6974501a4542251982fdc138f",
+  "prompts": {},
+  "sessions": {
+    "s_daf782b057e339": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "92e1a9bf-c56f-4774-be3b-332379d6656b",
+        "model": "gpt-5-mini"
+      },
+      "human_author": "Sergio Carracedo <hi@sergiocarracedo.es>"
+    }
+  }
+}
