@@ -45,25 +45,29 @@ test('Meetup getNext parses upcoming RSS events from JSON-LD pages', () => {
   </channel>
 </rss>`
   const eventPages = {
-    'https://www.meetup.com/test-group/events/1/': `<html><head><script type="application/ld+json">${JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Event',
-      startDate: futureDate,
-      eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
-      location: {
-        '@type': 'VirtualLocation',
-        url: 'https://www.meetup.com/test-group/events/1/'
-      }
-    })}</script></head></html>`,
-    'https://www.meetup.com/test-group/events/2/': `<html><head><script type="application/ld+json">${JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Event',
-      startDate: pastDate,
-      location: {
-        '@type': 'Place',
-        name: 'Old venue'
-      }
-    })}</script></head></html>`
+    'https://www.meetup.com/test-group/events/1/': `<html><head><script type="application/ld+json" data-next-head="">${JSON.stringify(
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        startDate: futureDate,
+        eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+        location: {
+          '@type': 'VirtualLocation',
+          url: 'https://www.meetup.com/test-group/events/1/',
+        },
+      },
+    )}</script></head></html>`,
+    'https://www.meetup.com/test-group/events/2/': `<html><head><script type="application/ld+json" data-next-head="">${JSON.stringify(
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        startDate: pastDate,
+        location: {
+          '@type': 'Place',
+          name: 'Old venue',
+        },
+      },
+    )}</script></head></html>`,
   }
 
   const meetup = loadMeetupWithMockedRequest((method, url) => {
@@ -73,7 +77,7 @@ test('Meetup getNext parses upcoming RSS events from JSON-LD pages', () => {
       return {
         getBody() {
           return rssFeed
-        }
+        },
       }
     }
 
@@ -81,7 +85,7 @@ test('Meetup getNext parses upcoming RSS events from JSON-LD pages', () => {
       return {
         getBody() {
           return eventPages[url]
-        }
+        },
       }
     }
 
@@ -90,13 +94,15 @@ test('Meetup getNext parses upcoming RSS events from JSON-LD pages', () => {
 
   const events = meetup.getNext({ meetupid: 'test-group' }, {})
 
-  assert.deepEqual(events, [{
-    sourceId: 'test-group-1',
-    title: 'Future Event',
-    date: new Date(futureDate).getTime(),
-    url: 'https://www.meetup.com/test-group/events/1/',
-    location: 'Online event'
-  }])
+  assert.deepEqual(events, [
+    {
+      sourceId: 'test-group-1',
+      title: 'Future Event',
+      date: new Date(futureDate).getTime(),
+      url: 'https://www.meetup.com/test-group/events/1/',
+      location: 'Online event',
+    },
+  ])
   assert.equal(calls.length, 3)
 })
 

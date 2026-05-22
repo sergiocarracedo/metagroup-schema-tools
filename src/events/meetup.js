@@ -47,19 +47,33 @@ function getTagValue(block, tag) {
 }
 
 function getJsonLdEvent(html) {
-  const matches = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi) || []
+  const matches =
+    html.matchAll(
+      /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
+    ) || []
 
-  for (let index = 0; index < matches.length; index++) {
-    const match = matches[index].match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)
-
-    if (!match) {
-      continue
-    }
-
+  for (const match of matches) {
     try {
       const data = JSON.parse(match[1])
-      if (data['@type'] === 'Event') {
+
+      if (data && data['@type'] === 'Event') {
         return data
+      }
+
+      if (Array.isArray(data)) {
+        const event = data.find((item) => item && item['@type'] === 'Event')
+        if (event) {
+          return event
+        }
+      }
+
+      if (data && Array.isArray(data['@graph'])) {
+        const event = data['@graph'].find(
+          (item) => item && item['@type'] === 'Event',
+        )
+        if (event) {
+          return event
+        }
       }
     } catch (e) {
       continue
@@ -74,7 +88,10 @@ function getLocationFromEventData(eventData) {
     return ''
   }
 
-  if (eventData.eventAttendanceMode === 'https://schema.org/OnlineEventAttendanceMode') {
+  if (
+    eventData.eventAttendanceMode ===
+    'https://schema.org/OnlineEventAttendanceMode'
+  ) {
     return 'Online event'
   }
 
@@ -90,8 +107,10 @@ function getLocationFromEventData(eventData) {
     address.addressLocality,
     address.addressRegion,
     address.postalCode,
-    address.addressCountry
-  ].filter(Boolean).join(' - ')
+    address.addressCountry,
+  ]
+    .filter(Boolean)
+    .join(' - ')
 }
 
 function getDateFromDescription(description) {
@@ -102,21 +121,28 @@ function getDateFromDescription(description) {
 
   const lines = normalized
     .split('\n')
-    .map(line => decodeHtml(line).replace(/\s+/g, ' ').trim())
+    .map((line) => decodeHtml(line).replace(/\s+/g, ' ').trim())
     .filter(Boolean)
 
-  const dateLine = lines.find(line => /(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/i.test(line))
+  const dateLine = lines.find((line) =>
+    /(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/i.test(
+      line,
+    ),
+  )
 
   if (!dateLine) {
     return null
   }
 
-  const cleaned = dateLine.replace(/^[^A-Za-z0-9]+/, '').split(' - ')[0].trim()
+  const cleaned = dateLine
+    .replace(/^[^A-Za-z0-9]+/, '')
+    .split(' - ')[0]
+    .trim()
   const formats = [
     'MMMM D, YYYY | HH:mm',
     'MMMM D, YYYY | H:mm',
     'MMM D, YYYY | HH:mm',
-    'MMM D, YYYY | H:mm'
+    'MMM D, YYYY | H:mm',
   ]
 
   const parsed = moment(cleaned, formats, true)
@@ -131,10 +157,12 @@ function getLocationFromDescription(description) {
 
   const lines = normalized
     .split('\n')
-    .map(line => decodeHtml(line).replace(/\s+/g, ' ').trim())
+    .map((line) => decodeHtml(line).replace(/\s+/g, ' ').trim())
     .filter(Boolean)
 
-  const locationLine = lines.find(line => /^(📍|location[: ]|online\b)/i.test(line))
+  const locationLine = lines.find((line) =>
+    /^(📍|location[: ]|online\b)/i.test(line),
+  )
 
   if (!locationLine) {
     return ''
@@ -151,8 +179,12 @@ function getEventDetails(url, description) {
 
     if (eventData) {
       return {
-        date: eventData.startDate ? new Date(eventData.startDate).getTime() : getDateFromDescription(description),
-        location: getLocationFromEventData(eventData) || getLocationFromDescription(description)
+        date: eventData.startDate
+          ? new Date(eventData.startDate).getTime()
+          : getDateFromDescription(description),
+        location:
+          getLocationFromEventData(eventData) ||
+          getLocationFromDescription(description),
       }
     }
   } catch (e) {
@@ -161,7 +193,7 @@ function getEventDetails(url, description) {
 
   return {
     date: getDateFromDescription(description),
-    location: getLocationFromDescription(description)
+    location: getLocationFromDescription(description),
   }
 }
 
@@ -171,10 +203,10 @@ function getFeedItems(source) {
   const xml = dataRaw.getBody('utf8')
   const items = xml.match(/<item>([\s\S]*?)<\/item>/gi) || []
 
-  return items.map(itemBlock => ({
+  return items.map((itemBlock) => ({
     title: getTagValue(itemBlock, 'title'),
     url: getTagValue(itemBlock, 'link'),
-    description: getTagValue(itemBlock, 'description')
+    description: getTagValue(itemBlock, 'description'),
   }))
 }
 
@@ -183,16 +215,19 @@ module.exports = {
     const nextEvents = []
 
     try {
-      getFeedItems(source).forEach(item => {
+      getFeedItems(source).forEach((item) => {
         const eventDetails = getEventDetails(item.url, item.description)
 
-        if (eventDetails.date !== null && eventDetails.date >= new Date().getTime()) {
+        if (
+          eventDetails.date !== null &&
+          eventDetails.date >= new Date().getTime()
+        ) {
           nextEvents.push({
             sourceId: getSourceId(source, item, eventDetails.date),
             title: item.title,
             date: eventDetails.date,
             url: item.url,
-            location: eventDetails.location || ''
+            location: eventDetails.location || '',
           })
         }
       })
@@ -205,5 +240,5 @@ module.exports = {
 
   getPrev(source, options) {
     return []
-  }
+  },
 }
