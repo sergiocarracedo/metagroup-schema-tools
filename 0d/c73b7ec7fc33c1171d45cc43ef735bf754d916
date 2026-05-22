@@ -1,0 +1,29 @@
+tests/meetup.e2e.test.js
+  s_daf782b057e339::t_08fb8a5d0e1ddb 1-16
+tests/meetup.test.js
+  h_f90ee31b03fc41 48-49,56-61,67-70,80,88,103-104
+src/events/meetup.js
+  s_daf782b057e339::t_2212103c6f85fc 51-53,55,58-59,62-76
+  h_f90ee31b03fc41 110,124,127,129-130,145,160,163-164,187,196,206,209,218,230,243
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.11",
+  "base_commit_sha": "0dc73b7ec7fc33c1171d45cc43ef735bf754d916",
+  "prompts": {},
+  "humans": {
+    "h_f90ee31b03fc41": {
+      "author": "Sergio Carracedo <hi@sergiocarracedo.es>"
+    }
+  },
+  "sessions": {
+    "s_daf782b057e339": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "92e1a9bf-c56f-4774-be3b-332379d6656b",
+        "model": "gpt-5-mini"
+      },
+      "human_author": "Sergio Carracedo <hi@sergiocarracedo.es>"
+    }
+  }
+}
