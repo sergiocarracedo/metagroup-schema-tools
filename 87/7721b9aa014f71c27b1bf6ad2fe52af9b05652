@@ -1,0 +1,19 @@
+package.json
+  s_49240f385126ad::t_e53441b2d79060 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.0",
+  "base_commit_sha": "877721b9aa014f71c27b1bf6ad2fe52af9b05652",
+  "prompts": {},
+  "sessions": {
+    "s_49240f385126ad": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1abc0c51bffeimCnydcz5FtdRB",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "Sergio Carracedo <hi@sergiocarracedo.es>"
+    }
+  }
+}
