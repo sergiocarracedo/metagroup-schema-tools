@@ -1,0 +1,40 @@
+.github/workflows/release-please.yml
+  s_49240f385126ad::t_ddd2592c179378 1-22
+commitlint.config.js
+  s_49240f385126ad::t_51b43e4c962e67 1-3
+.github/workflows/auto-merge-release-please.yml
+  s_49240f385126ad::t_b0f712b3b9221a 1-65
+lefthook.yml
+  s_49240f385126ad::t_0305445ed029ad 1-10
+release-please-config.json
+  s_49240f385126ad::t_9160e23c77c8ae 1-14
+.github/workflows/publish.yml
+  s_49240f385126ad::t_36106dfd23d9b2 1-39,41-55
+  s_49240f385126ad::t_a66ea9797e7554 40
+package.json
+  s_49240f385126ad::t_8d768321a52506 25-32
+  s_49240f385126ad::t_acb371b3cc611f 42-45
+  s_49240f385126ad::t_c26f07f01ce4d4 33
+  s_49240f385126ad::t_26f6ed53c2b994 7-12
+release-please-manifest.json
+  s_49240f385126ad::t_31e6a181585a41 1-3
+.github/workflows/ci.yml
+  s_49240f385126ad::t_c9759d61cf9cbc 10-19
+  s_49240f385126ad::t_2b7e3953ae68d5 1-9,20-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.0",
+  "base_commit_sha": "9a201b516fab9a1b50a6eaddae4d8cbc4d06630f",
+  "prompts": {},
+  "sessions": {
+    "s_49240f385126ad": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1abc0c51bffeimCnydcz5FtdRB",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "Sergio Carracedo <hi@sergiocarracedo.es>"
+    }
+  }
+}
