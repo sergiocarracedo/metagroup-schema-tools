@@ -1,0 +1,23 @@
+.github/workflows/release.yml
+  s_49240f385126ad::t_f37a56dbcae7bf 1,5-6,11,14-15,17-19,21-22,25-68
+.github/workflows/ci.yml
+  s_49240f385126ad::t_bce91a0b7bec34 1,5,7,14,16-17,19
+.github/workflows/publish.yml
+  s_49240f385126ad::t_0f39b68aee1117 1,4,9,15,18,20,22-23,25,27-33,35-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.0",
+  "base_commit_sha": "e1d9d277daec12ee464e25dd974903fbc5cb7072",
+  "prompts": {},
+  "sessions": {
+    "s_49240f385126ad": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1abc0c51bffeimCnydcz5FtdRB",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "Sergio Carracedo <hi@sergiocarracedo.es>"
+    }
+  }
+}
