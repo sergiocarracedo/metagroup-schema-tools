@@ -4,7 +4,7 @@
   "description": "Metagroup (like vigotech.org) schema tools",
   "main": "src/index.js",
   "scripts": {
-    "test": "node --test",
+    "test": "node --test tests/*.test.js",
     "hooks:install": "npx lefthook install",
     "hooks:run:commit-msg": "npx lefthook run commit-msg",
     "hooks:run:pre-commit": "npx lefthook run pre-commit",
