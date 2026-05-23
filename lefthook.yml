@@ -1,0 +1,10 @@
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {1}
+
+pre-commit:
+  commands:
+    test:
+      glob: "*.{js,json}"
+      run: npm test
