@@ -1,0 +1,55 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Update npm for Trusted Publishing
+        run: npm install -g npm@latest
+
+      - name: Determine dist-tag
+        id: meta
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "dist_tag=latest" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Publish package
+        run: npm publish --tag "${{ steps.meta.outputs.dist_tag }}" --access public
+
+      - name: Verify published package
+        run: |
+          for attempt in 1 2 3 4 5; do
+            PUBLISHED_VERSION=$(npm view metagroup-schema-tools version)
+            if [ "$PUBLISHED_VERSION" = "${{ steps.meta.outputs.version }}" ]; then
+              break
+            fi
+            if [ "$attempt" -eq 5 ]; then
+              echo "expected npm version ${{ steps.meta.outputs.version }}, got $PUBLISHED_VERSION"
+              exit 1
+            fi
+            sleep 5
+          done
+          npm view metagroup-schema-tools dist-tags --json
