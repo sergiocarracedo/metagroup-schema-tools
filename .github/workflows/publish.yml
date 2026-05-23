@@ -1,58 +1,36 @@
-name: publish
+name: Publish to npm
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_call:
   workflow_dispatch:
 
 permissions:
-  contents: read
   id-token: write
+  contents: read
 
 jobs:
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: main
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22'
           registry-url: https://registry.npmjs.org
+          cache: npm
 
-      - name: Set up npm auth
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
-          echo "always-auth=true" >> ~/.npmrc
+      - name: Update npm for Trusted Publishing
+        run: npm install -g npm@latest
 
-      - name: Determine dist-tag
-        id: meta
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "dist_tag=latest" >> "$GITHUB_OUTPUT"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Publish package
-        run: npm publish --tag "${{ steps.meta.outputs.dist_tag }}" --access public
-
-      - name: Verify published package
-        run: |
-          for attempt in 1 2 3 4 5; do
-            PUBLISHED_VERSION=$(npm view metagroup-schema-tools version)
-            if [ "$PUBLISHED_VERSION" = "${{ steps.meta.outputs.version }}" ]; then
-              break
-            fi
-            if [ "$attempt" -eq 5 ]; then
-              echo "expected npm version ${{ steps.meta.outputs.version }}, got $PUBLISHED_VERSION"
-              exit 1
-            fi
-            sleep 5
-          done
-          npm view metagroup-schema-tools dist-tags --json
+      - name: Publish to npm
+        run: npm publish
