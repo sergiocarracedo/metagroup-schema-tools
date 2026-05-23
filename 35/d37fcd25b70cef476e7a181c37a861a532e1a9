@@ -1,0 +1,21 @@
+.github/workflows/release-please.yml
+  s_49240f385126ad::t_d80be6055471cb 20
+.github/workflows/auto-merge-release-please.yml
+  s_49240f385126ad::t_d6ee88e54ce913 25,62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.0",
+  "base_commit_sha": "35d37fcd25b70cef476e7a181c37a861a532e1a9",
+  "prompts": {},
+  "sessions": {
+    "s_49240f385126ad": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1abc0c51bffeimCnydcz5FtdRB",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "Sergio Carracedo <hi@sergiocarracedo.es>"
+    }
+  }
+}
