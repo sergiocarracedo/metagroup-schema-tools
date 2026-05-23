@@ -37,13 +37,14 @@ Básicamente esta estructura permite definir o Metagrupo (co seu logo, links a r
 A chave `events` poder ser un obxecto único ou un array de obxectos, que define as fontes de eventos de dito grupo
 
 As fontes posibles actuais son:
-* Meetup: 
+* Meetup (via RSS feed): 
   `
   {
     "type": "meetup",
     "meetupid": "AIndustriosa"
   }
   `
+  Obtén os eventos desde `https://www.meetup.com/[GROUP ID]/events/rss/`. Debido ás limitacións actuais de Meetup, os eventos pasados non están dispoñibles nesta fonte e `getPrevFromSource(source, options)` devolverá un array baleiro para fontes Meetup.
 * Eventbrite: 
   `
   {
@@ -113,7 +114,7 @@ Provee métodos para importar e normalizar os próximos das distintas fontes
   * `getVideosFromSource(source, limit, options)` obten os videos dunha fonte. *Método asíncrono*
         
       
-  En todos os casos _options_ é un obxecto no que se pasan elementos que poden precisar cada un dos importadores, por exemplo, o importador de *youtube* precisa o _youtubeApiKey_ para poder funcionar.
+  En todos os casos _options_ é un obxecto no que se pasan elementos que poden precisar cada un dos importadores. O importador de *youtube* emprega a fonte RSS pública da canle, polo que non precisa chave de API.
   
   
 ## Exemplo de importador

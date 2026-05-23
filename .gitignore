@@ -1,4 +1,5 @@
-test
+test/*
+!test/meetup.test.js
 .env
 .idea
 
@@ -77,4 +78,3 @@ typings/
 
 # Serverless directories
 .serverless
-
