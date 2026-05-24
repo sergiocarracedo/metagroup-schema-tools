@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/VigoTech/metagroup-schema-tools/compare/v1.0.0...v1.1.0) (2026-05-24)
+
+
+### Features
+
+* add .node-version file with Node 22 ([c309a51](https://github.com/VigoTech/metagroup-schema-tools/commit/c309a5101c725cf31d01d1a5a0341a76868b7631))
+* add release-please-manifest and .node-version ([5f622e1](https://github.com/VigoTech/metagroup-schema-tools/commit/5f622e15115f15c41afd77abd545b441b831ec5f))
+
 ## 1.0.0 (2026-05-24)
 
 
