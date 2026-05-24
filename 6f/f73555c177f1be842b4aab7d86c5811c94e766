@@ -1,0 +1,21 @@
+release-please-manifest.json
+  s_49240f385126ad::t_e77d671a0ef584 1
+package.json
+  s_49240f385126ad::t_12ea1aea888ed6 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.0",
+  "base_commit_sha": "6ff73555c177f1be842b4aab7d86c5811c94e766",
+  "prompts": {},
+  "sessions": {
+    "s_49240f385126ad": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1abc0c51bffeimCnydcz5FtdRB",
+        "model": "deepseek-v4-flash-free"
+      },
+      "human_author": "Sergio Carracedo <hi@sergiocarracedo.es>"
+    }
+  }
+}
