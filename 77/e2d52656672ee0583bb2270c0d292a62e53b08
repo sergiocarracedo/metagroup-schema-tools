@@ -1,0 +1,11 @@
+.gitignore.bak
+  ai_agent 1-80
+.gitignore
+  ai_agent 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.0",
+  "base_commit_sha": "77e2d52656672ee0583bb2270c0d292a62e53b08",
+  "prompts": {}
+}
