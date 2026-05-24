@@ -1,0 +1,9 @@
+.trigger
+  ai_agent 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.0",
+  "base_commit_sha": "437e19599bdc4805c9af9ea846fa45c6861c675d",
+  "prompts": {}
+}
