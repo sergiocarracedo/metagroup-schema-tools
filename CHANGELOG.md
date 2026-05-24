@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/sergiocarracedo/metagroup-schema-tools/compare/v1.3.0...v1.4.0) (2026-05-24)
+
+
+### Features
+
+* trigger version bump from 1.1.2 ([437e195](https://github.com/sergiocarracedo/metagroup-schema-tools/commit/437e19599bdc4805c9af9ea846fa45c6861c675d))
+
 ## [1.3.0](https://github.com/sergiocarracedo/metagroup-schema-tools/compare/v1.2.0...v1.3.0) (2026-05-24)
 
 
