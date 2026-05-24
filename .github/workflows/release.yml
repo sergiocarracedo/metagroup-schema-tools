@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.check-release.outputs.release_created }}
+
+    steps:
+      - name: Run release-please
+        uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          release-type: node
+
+      - name: Auto-merge release PR
+        if: steps.release.outputs.prs_created == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUMBER=$(echo '${{ steps.release.outputs.prs }}' | jq -r '.[0].number')
+          echo "Merging release PR #${PR_NUMBER}"
+          gh pr merge "$PR_NUMBER" --squash --repo "${{ github.repository }}"
+
+      - name: Checkout updated main
+        if: steps.release.outputs.prs_created == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Create release after merge
+        if: steps.release.outputs.prs_created == 'true'
+        uses: googleapis/release-please-action@v4
+        id: release-after-merge
+        with:
+          release-type: node
+
+      - name: Check if release was created
+        id: check-release
+        run: |
+          RELEASED="false"
+          if [ "${{ steps.release.outputs.release_created }}" = "true" ] || \
+             [ "${{ steps.release.outputs.releases_created }}" = "true" ] || \
+             [ "${{ steps.release-after-merge.outputs.release_created }}" = "true" ] || \
+             [ "${{ steps.release-after-merge.outputs.releases_created }}" = "true" ]; then
+            RELEASED="true"
+          fi
+          echo "release_created=${RELEASED}" >> "$GITHUB_OUTPUT"
+
+  publish:
+    name: Publish
+    needs: release
+    if: ${{ needs.release.outputs.release_created == 'true' || github.event_name == 'workflow_dispatch' }}
+    uses: ./.github/workflows/publish.yml
+    permissions:
+      contents: read
+      id-token: write
